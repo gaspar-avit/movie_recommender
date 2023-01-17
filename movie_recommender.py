@@ -21,11 +21,11 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 os.environ['KAGGLE_USERNAME'] = st.secret['username']
 os.environ['KAGGLE_KEY'] = st.secret['key']
 
-'''
+
 api_token = {"username":st.secret['username'],"key":st.secret['key']}
-with open('/root/.kaggle/kaggle.json', 'w') as file:
+with open('/home/appuser/.kaggle/kaggle.json', 'w') as file:
     json.dump(api_token, file)
-'''
+
 
 # Activate Kaggle API
 api = KaggleApi()
