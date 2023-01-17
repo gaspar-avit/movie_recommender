@@ -18,8 +18,8 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 
 
 # Authenticate Kaggle account
-os.environ['KAGGLE_USERNAME'] = st.secret['username']
-os.environ['KAGGLE_KEY'] = st.secret['key']
+os.environ['KAGGLE_USERNAME'] = st.secrets['username']
+os.environ['KAGGLE_KEY'] = st.secrets['key']
 
 
 api_token = {"username":st.secrets['username'],"key":st.secrets['key']}
