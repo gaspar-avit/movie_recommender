@@ -1,8 +1,8 @@
 # Movie recommender system using Transformers based on Streamlit
 
 # Install libraries
-!pip install kaggle
-!pip install zipfile
+#!pip install kaggle
+#!pip install zipfile
 
 
 import streamlit as st
