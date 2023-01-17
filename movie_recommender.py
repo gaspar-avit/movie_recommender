@@ -9,13 +9,23 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
+import json
+import os
+
 from datetime import time, datetime
 from zipfile import ZipFile
 from kaggle.api.kaggle_api_extended import KaggleApi
 
+
+# Authenticate Kaggle account
+api_token = {"username":st.secret['username'],"key":st.secret['key']}
+with open('/root/.kaggle/kaggle.json', 'w') as file:
+    json.dump(api_token, file)
+
 # Activate Kaggle API
 api = KaggleApi()
 api.authenticate()
+
 
 
 # Downloading Movies dataset
