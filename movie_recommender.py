@@ -22,7 +22,7 @@ os.environ['KAGGLE_USERNAME'] = st.secret['username']
 os.environ['KAGGLE_KEY'] = st.secret['key']
 
 
-api_token = {"username":st.secret['username'],"key":st.secret['key']}
+api_token = {"username":st.secrets['username'],"key":st.secrets['key']}
 with open('/home/appuser/.kaggle/kaggle.json', 'w') as file:
     json.dump(api_token, file)
 
