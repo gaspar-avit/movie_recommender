@@ -51,7 +51,7 @@ zf.close()
 
 # Show first rows of dataset
 data = pd.read_csv('movies_metadata.csv', low_memory=False)
-st.write(data.loc[['title','overview']].head(5))
+st.write(data[['title','overview']].head(5))
 
 
 ###############################
