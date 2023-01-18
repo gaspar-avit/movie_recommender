@@ -26,11 +26,11 @@ from sentence_transformers import SentenceTransformer
 os.environ['KAGGLE_USERNAME'] = st.secrets['username']
 os.environ['KAGGLE_KEY'] = st.secrets['key']
 
-'''
-api_token = {"username":st.secrets['username'],"key":st.secrets['key']}
-with open('/home/appuser/.kaggle/kaggle.json', 'w') as file:
-    json.dump(api_token, file)
-'''
+
+#api_token = {"username":st.secrets['username'],"key":st.secrets['key']}
+#with open('/home/appuser/.kaggle/kaggle.json', 'w') as file:
+#    json.dump(api_token, file)
+
 
 # Activate Kaggle API
 api = KaggleApi()
