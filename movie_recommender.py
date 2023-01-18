@@ -15,23 +15,31 @@ import os
 from datetime import time, datetime
 from zipfile import ZipFile
 from kaggle.api.kaggle_api_extended import KaggleApi
+from sentence_transformers import SentenceTransformer
 
+
+###############################
+## --- CONNECT TO KAGGLE --- ##
+###############################
 
 # Authenticate Kaggle account
 os.environ['KAGGLE_USERNAME'] = st.secrets['username']
 os.environ['KAGGLE_KEY'] = st.secrets['key']
 
-
+'''
 api_token = {"username":st.secrets['username'],"key":st.secrets['key']}
 with open('/home/appuser/.kaggle/kaggle.json', 'w') as file:
     json.dump(api_token, file)
-
+'''
 
 # Activate Kaggle API
 api = KaggleApi()
 api.authenticate()
 
 
+###############################
+## ----- OBTAIN DATASET ---- ##
+###############################
 
 # Downloading Movies dataset
 api.dataset_download_file('rounakbanik/the-movies-dataset', 'movies_metadata.csv')
@@ -44,3 +52,12 @@ zf.close()
 # Show first rows of dataset
 data = pd.read_csv('movies_metadata.csv')
 st.write(data.head(5))
+
+
+###############################
+## ------ LOAD MODEL ------- ##
+###############################
+
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+
+
