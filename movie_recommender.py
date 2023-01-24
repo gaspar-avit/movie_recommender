@@ -72,8 +72,8 @@ st.write(data[['title','overview']].head(3))
 dataframe = None
 
 st.title("""
-Movie Recommendation System
-This is a Content Based Recommender System made on movie synopsis :smile:.
+Movie Recommendation System :film_frames:
+This is a Content Based Recommender System based on movie synopsis :sunglasses:.
  """)
 
 st.text("")
@@ -91,7 +91,9 @@ session.slider_count = st.slider(label="Number of results", min_value=3, max_val
 st.text("")
 st.text("")
 
-recommend_on = st.multiselect('Base recommendations on', ['Synopsis', 'Director', 'Genre', 'Duration'])
+session.recommend_on = st.multiselect('Base recommendations on', ['Synopsis', 'Director', 'Genre', 'Duration'])
+
+st.text("")
 
 st.write('Base recommendations on:')
 session.synopsis = st.checkbox('Synopsis')
@@ -102,9 +104,9 @@ session.duration = st.checkbox('Duration')
 st.text("")
 st.text("")
 
-buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
+#buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
 
-is_clicked = col1.button(label="Make recommendations")
+#is_clicked = col1.button(label="Make recommendations")
 
 #if is_clicked:
 #    dataframe = recommend_table(session.selected_movies, movie_count=session.slider_count, tfidf_data=tfidf)
