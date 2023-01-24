@@ -19,7 +19,7 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 from sentence_transformers import SentenceTransformer
 
 
-@st.cache(persist=True, show_spinner=False, suppress_st_warning=True)
+
 def load_dataset(api):
     # Downloading Movies dataset
     api.dataset_download_file('rounakbanik/the-movies-dataset', 'movies_metadata.csv')
@@ -29,7 +29,8 @@ def load_dataset(api):
     zf.extractall() 
     zf.close()
 
-    # Show first rows of dataset
+    # Create dataframe
+    @st.cache(persist=True, show_spinner=False, suppress_st_warning=True)
     data = pd.read_csv('movies_metadata.csv', low_memory=False)
 
     return data
