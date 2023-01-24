@@ -19,6 +19,22 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 from sentence_transformers import SentenceTransformer
 
 
+@st.cache(persist=True, show_spinner=False, suppress_st_warning=True)
+def load_dataset(api):
+    # Downloading Movies dataset
+    api.dataset_download_file('rounakbanik/the-movies-dataset', 'movies_metadata.csv')
+
+    # Extract data
+    zf = ZipFile('movies_metadata.csv.zip')
+    zf.extractall() 
+    zf.close()
+
+    # Show first rows of dataset
+    data = pd.read_csv('movies_metadata.csv', low_memory=False)
+
+    return data
+
+
 ###############################
 ## --- CONNECT TO KAGGLE --- ##
 ###############################
@@ -42,16 +58,8 @@ api.authenticate()
 ## ----- OBTAIN DATASET ---- ##
 ###############################
 
-# Downloading Movies dataset
-api.dataset_download_file('rounakbanik/the-movies-dataset', 'movies_metadata.csv')
-
-# Extract data
-zf = ZipFile('movies_metadata.csv.zip')
-zf.extractall() 
-zf.close()
-
-# Show first rows of dataset
-data = pd.read_csv('movies_metadata.csv', low_memory=False)
+# Create dataset
+data = load_dataset(api)
 #st.write(data[['title','overview']].head(3))
 
 
@@ -59,7 +67,7 @@ data = pd.read_csv('movies_metadata.csv', low_memory=False)
 ## ------ LOAD MODEL ------- ##
 ###############################
 
-#model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 
 
@@ -73,7 +81,7 @@ dataframe = None
 
 st.title("""
 Movie Recommendation System :film_frames:
-This is a Content Based Recommender System based on movie synopsis :sunglasses:.
+This is a Content Based Recommender System based on movie synopsis :sunglasses:
  """)
 
 st.text("")
@@ -91,9 +99,9 @@ session.slider_count = st.slider(label="Number of results", min_value=3, max_val
 st.text("")
 st.text("")
 
-session.recommend_on = st.multiselect('Base recommendations on', ['Synopsis', 'Director', 'Genre', 'Duration'])
-
-st.text("")
+#session.recommend_on = st.multiselect('Base recommendations on', ['Synopsis', 'Director', 'Genre', 'Duration'])
+#st.text("")
+#st.text("")
 
 st.write('Base recommendations on:')
 session.synopsis = st.checkbox('Synopsis')
@@ -106,7 +114,7 @@ st.text("")
 
 #buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
 
-#is_clicked = col1.button(label="Make recommendations")
+is_clicked = col1.button(label="Make recommendations")
 
 #if is_clicked:
 #    dataframe = recommend_table(session.selected_movies, movie_count=session.slider_count, tfidf_data=tfidf)
