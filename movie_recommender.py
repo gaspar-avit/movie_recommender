@@ -21,7 +21,7 @@ from sentence_transformers import SentenceTransformer
 
 #@st.cache(persist=True, show_spinner=False, suppress_st_warning=True)
 @st.experimental_memo
-def load_dataset(api):
+def load_dataset():
     # Downloading Movies dataset
     api.dataset_download_file('rounakbanik/the-movies-dataset', 'movies_metadata.csv')
 
@@ -60,7 +60,7 @@ api.authenticate()
 ###############################
 
 # Create dataset
-data = load_dataset(api)
+data = load_dataset()
 #st.write(data[['title','overview']].head(3))
 
 
