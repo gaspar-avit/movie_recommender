@@ -113,7 +113,7 @@ session.duration = st.checkbox('Duration')
 st.text("")
 st.text("")
 
-#buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
+buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
 
 is_clicked = col1.button(label="Make recommendations")
 
