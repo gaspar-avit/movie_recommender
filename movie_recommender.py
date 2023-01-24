@@ -52,7 +52,7 @@ zf.close()
 
 # Show first rows of dataset
 data = pd.read_csv('movies_metadata.csv', low_memory=False)
-st.write(data[['title','overview']].head(3))
+#st.write(data[['title','overview']].head(3))
 
 
 ###############################
@@ -116,7 +116,7 @@ st.text("")
 st.text("")
 st.text("")
 
-if data is not None:
-    st.table(data)
+#if data is not None:
+#    st.table(data)
 
 
