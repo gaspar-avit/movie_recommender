@@ -61,3 +61,48 @@ st.write(data[['title','overview']].head(5))
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 
+
+
+
+###############################
+## ------ APP MAIN --------- ##
+###############################
+
+dataframe = None
+
+st.title("""
+Movie Recommendation System
+This is a Content Based Recommender System made on movie synopsis :smile:.
+ """)
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+session.options = st.multiselect(label="Select prefered movies", options=data.title)
+
+st.text("")
+st.text("")
+
+session.slider_count = st.slider(label="Number of results", min_value=3, max_value=10)
+
+st.text("")
+st.text("")
+
+buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
+
+is_clicked = col1.button(label="Make recommendations")
+
+#if is_clicked:
+#    dataframe = recommend_table(session.options, movie_count=session.slider_count, tfidf_data=tfidf)
+
+st.text("")
+st.text("")
+st.text("")
+st.text("")
+
+if data is not None:
+    st.table(data)
+
+
