@@ -20,7 +20,7 @@ from sentence_transformers import SentenceTransformer
 
 
 #@st.cache(persist=True, show_spinner=False, suppress_st_warning=True)
-@st.experimental_memo
+@st.experimental_memo(persist=True, show_spinner=False, suppress_st_warning=True)
 def load_dataset():
     # Downloading Movies dataset
     api.dataset_download_file('rounakbanik/the-movies-dataset', 'movies_metadata.csv')
@@ -75,7 +75,7 @@ model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 
 ###############################
-## ------ APP MAIN --------- ##
+## --------- MAIN ---------- ##
 ###############################
 
 dataframe = None
@@ -115,7 +115,7 @@ st.text("")
 
 buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
 
-is_clicked = col1.button(label="Make recommendations")
+is_clicked = col1.button(label="Recommend me a movie!")
 
 #if is_clicked:
 #    dataframe = recommend_table(session.selected_movies, movie_count=session.slider_count, tfidf_data=tfidf)
