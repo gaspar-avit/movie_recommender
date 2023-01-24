@@ -81,7 +81,7 @@ st.text("")
 st.text("")
 st.text("")
 
-session.options = st.multiselect(label="Select prefered movies", options=data.title)
+session.selected_movies = st.multiselect(label="Select prefered movies", options=data.title)
 
 st.text("")
 st.text("")
@@ -91,7 +91,13 @@ session.slider_count = st.slider(label="Number of results", min_value=3, max_val
 st.text("")
 st.text("")
 
-recommend_on = session.multiselect('Base recommendations on', ['Synopsis', 'Director', 'Genre', 'Duration'])
+recommend_on = st.multiselect('Base recommendations on', ['Synopsis', 'Director', 'Genre', 'Duration'])
+
+st.write('Base recommendations on:')
+session.synopsis = st.checkbox('Synopsis')
+session.director = st.checkbox('Director')
+session.genre = st.checkbox('Genre')
+session.duration = st.checkbox('Duration')
 
 st.text("")
 st.text("")
@@ -101,7 +107,7 @@ buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
 is_clicked = col1.button(label="Make recommendations")
 
 #if is_clicked:
-#    dataframe = recommend_table(session.options, movie_count=session.slider_count, tfidf_data=tfidf)
+#    dataframe = recommend_table(session.selected_movies, movie_count=session.slider_count, tfidf_data=tfidf)
 
 st.text("")
 st.text("")
