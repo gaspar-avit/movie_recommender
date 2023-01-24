@@ -52,14 +52,14 @@ zf.close()
 
 # Show first rows of dataset
 data = pd.read_csv('movies_metadata.csv', low_memory=False)
-st.write(data[['title','overview']].head(5))
+st.write(data[['title','overview']].head(3))
 
 
 ###############################
 ## ------ LOAD MODEL ------- ##
 ###############################
 
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+#model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 
 
@@ -87,6 +87,11 @@ st.text("")
 st.text("")
 
 session.slider_count = st.slider(label="Number of results", min_value=3, max_value=10)
+
+st.text("")
+st.text("")
+
+recommend_on = session.multiselect('Base recommendations on', ['Synopsis', 'Director', 'Genre', 'Duration'])
 
 st.text("")
 st.text("")
