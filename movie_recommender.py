@@ -169,7 +169,7 @@ buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
 
 is_clicked = col1.button(label="Recommend me a movie!")
 
-st.write(data.overview.to_list())
+st.write(data.iloc[:5].overview.to_list())
 
 #if is_clicked:
 #    dataframe = recommend_table(session.selected_movies, movies_data=data, movie_count=session.slider_count)
