@@ -8,8 +8,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import altair as alt
 import json
+import requests
 import os
 
 from streamlit import session_state as session
@@ -19,9 +19,18 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 from sentence_transformers import SentenceTransformer
 
 
+
+###############################
+## ------- FUNCTIONS ------- ##
+###############################
+
 #@st.cache(persist=True, show_spinner=False, suppress_st_warning=True)
 @st.experimental_memo(persist=True, show_spinner=False, suppress_st_warning=True)
 def load_dataset():
+    """
+    Load Dataset from Kaggle
+    -return: dataframe containing dataset
+    """
     # Downloading Movies dataset
     api.dataset_download_file('rounakbanik/the-movies-dataset', 'movies_metadata.csv')
 
@@ -34,6 +43,49 @@ def load_dataset():
     data = pd.read_csv('movies_metadata.csv', low_memory=False)
 
     return data
+
+def recommend_table(list_prefered_movies, movies_data, movie_count=10):
+    """
+    Function for recommending movies
+    -param list_prefered_movies: list of movies selected by user
+    -param tfidf_data: self-explanatory
+    -param movie_count: number of movies to suggest
+    -return: dataframe containing suggested movie
+    """
+
+    scores_similarity = []
+    for movie in list_prefered_movies:
+        a = query(
+                {
+                    "inputs": {
+                        "source_sentence": movies_data[movies_data.title==movie],
+                        "sentences": movies_data.overview.to_list(),
+                    }
+                }
+            )
+
+
+    movie_enjoyed_df = tfidf_data.reindex(list_of_movie_enjoyed)
+    user_prof = movie_enjoyed_df.mean()
+    tfidf_subset_df = tfidf_data.drop(list_of_movie_enjoyed)
+    similarity_array = cosine_similarity(user_prof.values.reshape(1, -1), tfidf_subset_df)
+    similarity_df = pd.DataFrame(similarity_array.T, index=tfidf_subset_df.index, columns=["similarity_score"])
+    sorted_similarity_df = similarity_df.sort_values(by="similarity_score", ascending=False).head(movie_count)
+
+    return sorted_similarity_df
+
+def query(payload):
+    """
+    Get prediction from HuggingFace Inference API
+    -param payload: json including the text to be compared
+    -return: list of similarities
+    """
+    data = json.dumps(payload)
+    API_URL = "https://api-inference.huggingface.co/models/all-MiniLM-L6-v2"
+    headers = {"Authorization": f"Bearer {st.secrets['hf_token']}"}
+    
+    response = requests.request("POST", API_URL, headers=headers, data=data)
+    return json.loads(response.content.decode("utf-8"))
 
 
 ###############################
@@ -117,8 +169,10 @@ buffer1, col1, buffer2 = st.columns([1.45, 1, 1])
 
 is_clicked = col1.button(label="Recommend me a movie!")
 
+st.write(data.overview.to_list())
+
 #if is_clicked:
-#    dataframe = recommend_table(session.selected_movies, movie_count=session.slider_count, tfidf_data=tfidf)
+#    dataframe = recommend_table(session.selected_movies, movies_data=data, movie_count=session.slider_count)
 
 st.text("")
 st.text("")
