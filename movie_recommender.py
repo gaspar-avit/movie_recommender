@@ -44,35 +44,12 @@ def load_dataset():
 
     return data
 
-def recommend_table(list_prefered_movies, movies_data, movie_count=10):
+@st.cache
+def load_model():
     """
-    Function for recommending movies
-    -param list_prefered_movies: list of movies selected by user
-    -param tfidf_data: self-explanatory
-    -param movie_count: number of movies to suggest
-    -return: dataframe containing suggested movie
+    Load Sentence Similarity model
     """
-
-    scores_similarity = []
-    for movie in list_prefered_movies:
-        a = query(
-                {
-                    "inputs": {
-                        "source_sentence": movies_data[movies_data.title==movie],
-                        "sentences": movies_data.overview.to_list(),
-                    }
-                }
-            )
-
-
-    movie_enjoyed_df = tfidf_data.reindex(list_of_movie_enjoyed)
-    user_prof = movie_enjoyed_df.mean()
-    tfidf_subset_df = tfidf_data.drop(list_of_movie_enjoyed)
-    similarity_array = cosine_similarity(user_prof.values.reshape(1, -1), tfidf_subset_df)
-    similarity_df = pd.DataFrame(similarity_array.T, index=tfidf_subset_df.index, columns=["similarity_score"])
-    sorted_similarity_df = similarity_df.sort_values(by="similarity_score", ascending=False).head(movie_count)
-
-    return sorted_similarity_df
+    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 def query(payload):
     """
@@ -86,6 +63,40 @@ def query(payload):
     
     response = requests.request("POST", API_URL, headers=headers, data=data)
     return json.loads(response.content.decode("utf-8"))
+
+def recommend_table(list_prefered_movies, movies_data, movie_count=10):
+    """
+    Function for recommending movies
+    -param list_prefered_movies: list of movies selected by user
+    -param tfidf_data: self-explanatory
+    -param movie_count: number of movies to suggest
+    -return: dataframe containing suggested movie
+    """
+
+    scores_similarity = []
+    for movie in list_prefered_movies:
+
+        similarity = query(
+        {
+            "inputs": {
+                "source_sentence": movies_data.loc[movies_data.title==movie,'overview'].values[0],
+                "sentences": movies_data.overview.to_list(),
+                }
+            }
+        )
+
+        similarity = pd.DataFrame(similarity, columns=['score']).sort_values(by='score', ascending=False)
+
+
+    movie_enjoyed_df = tfidf_data.reindex(list_of_movie_enjoyed)
+    user_prof = movie_enjoyed_df.mean()
+    tfidf_subset_df = tfidf_data.drop(list_of_movie_enjoyed)
+    similarity_array = cosine_similarity(user_prof.values.reshape(1, -1), tfidf_subset_df)
+    similarity_df = pd.DataFrame(similarity_array.T, index=tfidf_subset_df.index, columns=["similarity_score"])
+    sorted_similarity_df = similarity_df.sort_values(by="similarity_score", ascending=False).head(movie_count)
+
+    return sorted_similarity_df
+
 
 
 ###############################
@@ -114,14 +125,6 @@ api.authenticate()
 # Create dataset
 data = load_dataset()
 #st.write(data[['title','overview']].head(3))
-
-
-###############################
-## ------ LOAD MODEL ------- ##
-###############################
-
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-
 
 
 
@@ -157,9 +160,9 @@ st.text("")
 #st.text("")
 
 st.write('Base recommendations on:')
-session.synopsis = st.checkbox('Synopsis')
-session.director = st.checkbox('Director')
+session.synopsis = st.checkbox('Synopsis', value=True)
 session.genre = st.checkbox('Genre')
+session.director = st.checkbox('Director')
 session.duration = st.checkbox('Duration')
 
 st.text("")
